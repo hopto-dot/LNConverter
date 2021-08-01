@@ -81,7 +81,8 @@ namespace LNConverter
                 {
                     HTMLConvert = HTML;
                 }
-                else if (Index == Epub.ReadingOrder.Count - 1) {
+                else if (Index == Epub.ReadingOrder.Count - 1)
+                {
                     int SnipIndex = HTML.IndexOf("<html");
                     HTML = HTML.Substring(SnipIndex);
                     SnipIndex = HTML.IndexOf(">") + 4;
