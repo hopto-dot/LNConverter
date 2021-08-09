@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using VersOne.Epub;
@@ -103,8 +104,35 @@ namespace LNConverter
                 
                 Index++;
             }
+
+            String OutputLocation = System.Environment.ExpandEnvironmentVariables("%userprofile%/downloads/");
+
+            Directory.CreateDirectory(OutputLocation + Epub.Title);
+            Directory.CreateDirectory(OutputLocation + Epub.Title + "/images");
+            foreach (var imageFile in Epub.Content.Images.Values)
+            {
+                byte[] coverImageContent = imageFile.Content;
+                if (coverImageContent != null)
+                {
+                    using (MemoryStream coverImageStream = new MemoryStream(coverImageContent))
+                    {
+                        Image coverImage = Image.FromStream(coverImageStream);
+                        //try
+                        //{
+                            coverImage.Save(imageFile.FileName.Replace("images/", ""), ImageFormat.Jpeg);
+                        //} catch
+                        //{
+                        //    goto SkipSave;
+                        //}
+                        
+                        File.Move(imageFile.FileName.Replace("images/", ""), OutputLocation + Epub.Title + "/" + imageFile.FileName, true);
+                    SkipSave:;
+                    }
+                }   
+            }
+
             HTMLConvert = HTMLConvert.Replace("\n", "");
-            File.Create(System.Environment.ExpandEnvironmentVariables("%userprofile%/downloads/") + Epub.Title + ".html").Dispose();
+            File.Create(OutputLocation + Epub.Title + ".html").Dispose();
             using (StreamWriter writer = new StreamWriter(System.Environment.ExpandEnvironmentVariables("%userprofile%/downloads/") + Epub.Title + ".html"))
             {
                 writer.WriteLine(HTMLConvert);
