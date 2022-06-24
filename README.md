@@ -1,7 +1,7 @@
 # LNConverter
 Convert Epub files to HTML
 
-Bulk conversion not yet supported, some light novels may not work well.
+Bulk conversion not yet supported, some light novels may not work well or at all.
 
 Opens in Japanese if your system has Japanese installed.
 
